@@ -22,7 +22,7 @@ function submitForm(evt) {
   loadMore.style.display = 'block';
   fetchApiService.resetPage();
   clearPage();
-  imagesNumber = 0;
+  // imagesNumber = 0;
   fetchApiService.fetchImages().then(item => {
       const { hits, totalHits } = item.data;
      
