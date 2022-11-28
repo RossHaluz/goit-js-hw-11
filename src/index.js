@@ -21,7 +21,7 @@ function submitForm(evt) {
   }
   fetchApiService.resetPage();
   clearPage();
-  // imagesNumber = 0;
+  imagesNumber = 0;
   fetchApiService.fetchImages().then(item => {
       const { hits, totalHits } = item.data;
      
@@ -38,6 +38,7 @@ function submitForm(evt) {
 
       if (imagesNumber === 0) {
         loadMore.style.display = 'none';
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
       }
       Notiflix.Notify.success(`Success, find ${totalHits} images`);
       renderMarkup(hits);
@@ -50,8 +51,9 @@ function onClickLoadMore() {
     const { hits } = item.data;
     renderMarkup(hits);
     imagesNumber -= hits.length;
-    if (imagesNumber === 0|| hits.length < 40) {
+    if (imagesNumber === 0 || hits.length < 40) {
       loadMore.style.display = 'none';
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     }
   });
 }
