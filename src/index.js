@@ -19,7 +19,6 @@ function submitForm(evt) {
     clearPage();
     return Notiflix.Notify.failure('Please enter something!');
   }
-  loadMore.style.display = 'block';
   fetchApiService.resetPage();
   clearPage();
   // imagesNumber = 0;
@@ -27,12 +26,13 @@ function submitForm(evt) {
       const { hits, totalHits } = item.data;
      
       if (!totalHits) {
-        loadMore.classList.add('is-hidden');
+        loadMore.style.display = 'none';
         return Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
       }
-     loadMore.classList.remove = 'is-hidden';
+  
+    loadMore.style.display = 'block';
     imagesNumber = totalHits;
     imagesNumber -= hits.length;
 
