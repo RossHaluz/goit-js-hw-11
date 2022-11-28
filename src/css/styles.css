@@ -10,6 +10,8 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  margin: 0;
+  padding-top: 80px;
 }
 
 #search-box {
@@ -29,4 +31,42 @@ body {
   gap: 30px;
   justify-content: center;
   margin: 20px 0 20px 0;
+}
+
+.container {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  justify-content: center;
+  padding: 15px;
+  background-color: #1877f2;
+  top: 0;
+  left: 0;
+}
+
+.search-form__input {
+  border: none;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.search-form__btn {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn_container {
+  display: flex;
+  justify-content: center;
+}
+
+.load-more {
+  padding: 10px 20px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  background-color: #1877f2;
+  cursor: pointer;
 }

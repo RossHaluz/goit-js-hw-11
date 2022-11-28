@@ -15,22 +15,24 @@ loadMore.addEventListener('click', onClickLoadMore);
 
 function submitForm(evt) {
   evt.preventDefault();
+  console.log(fetchApiService.number)
   fetchApiService.query = evt.currentTarget.elements.searchQuery.value.trim();
   if (!fetchApiService.query) {
     clearPage()
    return Notiflix.Notify.failure('Please enter something!');
   }
-  loadMore.classList.remove('is-hidden')
+
   fetchApiService.resetPage();
   clearPage();
 
   fetchApiService.fetchImages().then(item => {
     const {hits, totalHits} = item.data
     if (!totalHits) {
+       Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
       loadMore.classList.add('is-hidden')
-      return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-       
+      return
     }
+    loadMore.classList.remove('is-hidden')
     console.log(item)
 Notiflix.Notify.success(`Success, find ${totalHits} images`);
     renderMarkup(hits)
@@ -41,11 +43,17 @@ Notiflix.Notify.success(`Success, find ${totalHits} images`);
 
 function onClickLoadMore() {
   fetchApiService.fetchImages().then(item => {
-    fetchApiService.incrementPage()
     const { hits, totalHits } = item.data;
+    fetchApiService.incrementPage()
     renderMarkup(hits)
+console.log(fetchApiService.number)
 
-  // console.log(amountPage)
+
+    const mathNumber = Math.round(totalHits / 40);
+
+    if (fetchApiService.number === mathNumber) {
+      loadMore.classList.add('is-hidden');
+    }
 
 
   });

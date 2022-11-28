@@ -20,7 +20,6 @@ export default class FetchApiService {
 
         try {
             const response = await axios.get(`${BASE_URL}${KEY}&${params}&q=${this.searchValue}&page=${this.pageNumber}&per_page=${this.parePage}`)
-            this.incrementPage()
             return response;
         } catch (error) {
             Notiflix.Notify.failure('Qui timide rogat docet negare');
