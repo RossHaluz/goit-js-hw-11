@@ -1,6 +1,9 @@
 import Notiflix from 'notiflix';
 import './css/styles.css';
 import FetchApiService from './js/news-service';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -12,6 +15,13 @@ let imagesNumber = 0;
 form.addEventListener('submit', submitForm);
 loadMore.addEventListener('click', onClickLoadMore);
 
+let simpleGallery = new SimpleLightbox('.gallery a', {
+  captions: true,
+  captionPosition: 'bottom',
+  captionsData: "alt",
+  captionDelay: 250,
+});
+
 function submitForm(evt) {
   evt.preventDefault();
   fetchApiService.query = evt.currentTarget.elements.searchQuery.value.trim();
@@ -19,10 +29,12 @@ function submitForm(evt) {
     clearPage();
     return Notiflix.Notify.failure('Please enter something!');
   }
+
   fetchApiService.resetPage();
   clearPage();
   imagesNumber = 0;
   fetchApiService.fetchImages().then(item => {
+
       const { hits, totalHits } = item.data;
      
       if (!totalHits) {
@@ -31,7 +43,7 @@ function submitForm(evt) {
           'Sorry, there are no images matching your search query. Please try again.'
         );
       }
-  
+ 
     loadMore.style.display = 'block';
     imagesNumber = totalHits;
     imagesNumber -= hits.length;
@@ -40,8 +52,9 @@ function submitForm(evt) {
         loadMore.style.display = 'none';
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
       }
-      Notiflix.Notify.success(`Success, find ${totalHits} images`);
-      renderMarkup(hits);
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    renderMarkup(hits);
+     simpleGallery.refresh();
     })
     .catch(err => console.log(err));
 }
@@ -50,6 +63,7 @@ function onClickLoadMore() {
   fetchApiService.fetchImages().then(item => {
     const { hits } = item.data;
     renderMarkup(hits);
+     simpleGallery.refresh();
     imagesNumber -= hits.length;
     if (imagesNumber === 0 || hits.length < 40) {
       loadMore.style.display = 'none';
@@ -58,12 +72,16 @@ function onClickLoadMore() {
   });
 }
 
+
+
+
 function renderMarkup(arr) {
   const markup = arr
     .map(
-      ({ webformatURL, tags, likes, views, comments, downloads }) => `
+      ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
+  
   <div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"/>
+<a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="300"/></a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>
@@ -93,3 +111,10 @@ function renderMarkup(arr) {
 function clearPage() {
   gallery.innerHTML = '';
 }
+
+// const lightbox = new SimpleLightbox('.gallery a', {  
+//   captions: true,
+//   captionPosition: 'bottom',
+//   captionsData: "alt",
+//   captionDelay: 250,
+// });
