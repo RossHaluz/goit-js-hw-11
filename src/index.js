@@ -20,19 +20,20 @@ function submitForm(evt) {
     clearPage()
    return Notiflix.Notify.failure('Please enter something!');
   }
-  loadMore.removeAttribute('hidden')
+  loadMore.classList.remove('is-hidden')
   fetchApiService.resetPage();
   clearPage();
 
   fetchApiService.fetchImages().then(item => {
-    totalHits += item.data.totalHits;
-    if (!item.data.totalHits) {
+    const {hits, totalHits} = item.data
+    if (!totalHits) {
+      loadMore.classList.add('is-hidden')
       return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
        
     }
     console.log(item)
-Notiflix.Notify.success(`Success, find ${item.data.totalHits} images`);
-    renderMarkup(item.data.hits)
+Notiflix.Notify.success(`Success, find ${totalHits} images`);
+    renderMarkup(hits)
 
 
   }).catch(err => console.log(err))
@@ -40,11 +41,11 @@ Notiflix.Notify.success(`Success, find ${item.data.totalHits} images`);
 
 function onClickLoadMore() {
   fetchApiService.fetchImages().then(item => {
-    renderMarkup(item.data.hits)
-    console.log(item)
+    fetchApiService.incrementPage()
+    const { hits, totalHits } = item.data;
+    renderMarkup(hits)
 
-    const muthNumber = Math.round(item.data.totalHits / fetchApiService.number) //13
-    console.log(muthNumber)
+  // console.log(amountPage)
 
 
   });

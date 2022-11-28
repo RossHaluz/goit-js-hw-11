@@ -5,12 +5,12 @@ export default class FetchApiService {
     constructor() {
         this.pageNumber = 1;
         this.searchValue = '';
+        this.parePage = 40;
     }
     
     async fetchImages() {
         const BASE_URL = "https://pixabay.com/api/?key=";
         const KEY = "31525049-8cf7ae88f273a5df998b4a2e3";
-        const PARE_PAGE = 40;
 
         const params = new URLSearchParams({
             image_type: 'photo',
@@ -19,7 +19,7 @@ export default class FetchApiService {
         })
 
         try {
-            const response = await axios.get(`${BASE_URL}${KEY}&${params}&q=${this.searchValue}&page=${this.pageNumber}&per_page=${PARE_PAGE}`)
+            const response = await axios.get(`${BASE_URL}${KEY}&${params}&q=${this.searchValue}&page=${this.pageNumber}&per_page=${this.parePage}`)
             this.incrementPage()
             return response;
         } catch (error) {
